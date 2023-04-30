@@ -1,3 +1,4 @@
+"use strict";
 import HomeView from "./views/HomeView.js";
 import AboutView from "./views/AboutView.js";
 import WorkView from "./views/WorkView.js";
