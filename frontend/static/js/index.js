@@ -10,22 +10,6 @@ const navigateTo = (url) => {
   router();
 };
 
-const pathToRegex = (path) =>
-  new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
-
-const getParams = (match) => {
-  const values = match.result.slice(1);
-  const keys = Array.from(match.route.path.matchAll(/:(\w+)/g)).map(
-    (result) => result[1]
-  );
-
-  return Object.fromEntries(
-    keys.map((key, i) => {
-      return [key, values[i]];
-    })
-  );
-};
-
 const router = async () => {
   const routes = [
     {
@@ -54,22 +38,20 @@ const router = async () => {
   const potentialMatches = routes.map((route) => {
     return {
       route: route,
-      result: location.pathname.match(pathToRegex(route.path)),
+      isMatch: location.pathname === route.path,
     };
   });
-
-  let match = potentialMatches.find(
-    (potentialMatch) => potentialMatch.result !== null
-  );
+  console.log(potentialMatches);
+  let match = potentialMatches.find((potentialMatch) => potentialMatch.isMatch);
 
   if (!match) {
     match = {
       route: routes[0],
-      result: [location.pathname],
+      isMatch: true,
     };
   }
 
-  const view = new match.route.view(getParams(match));
+  const view = new match.route.view();
 
   const app = document.querySelector("#app");
   app.innerHTML = await view.getHtml();
