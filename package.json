@@ -1,0 +1,27 @@
+{
+  "name": "spa-portfolio-project",
+  "version": "1.0.0",
+  "description": "Single page application portfolio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darnahorna/spa-portfolio-project.git"
+  },
+  "keywords": [
+    "SPA",
+    "portfolio"
+  ],
+  "author": "Daria Nahorna",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Darnahorna/spa-portfolio-project/issues"
+  },
+  "homepage": "https://github.com/Darnahorna/spa-portfolio-project#readme",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "express": "^4.18.2"
+  }
+}
