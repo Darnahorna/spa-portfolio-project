@@ -27,14 +27,13 @@ h1 {
 }
 h2 {
   font-size: 3vh;
-  padding: 2vh 0 1vw;
+  padding: 2vh 1vw;
 }
 p {
   font-size: 2vh;
   line-height: 2;
 }
 nav {
-  height: 12vh;
   overflow: visible;
 }
 section {
@@ -44,6 +43,7 @@ section {
 }
 
 .navbar-nav {
+  height: 12vh;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -340,24 +340,40 @@ section {
 .button-block {
   margin-top: 3vh;
 }
-.login_section {
+
+.form-input {
+  padding: 2vh 3vh;
+  box-sizing: border-box;
+  border: 0.01vh solid var(--secondary-color);
+  border-radius: 3vh;
+  background-color: var(--space-background);
+  font-size: 2vh;
+  outline: var(--secondary-color);
+  width: 100%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-section {
   background: white;
-  border-radius: 10px;
+  border-radius: 3vh;
   color: var(--text-color);
   font-weight: 600;
-  padding: 10vh;
-  margin: 10vh;
+  padding: 2vh 3vh;
+  padding: 1vh 2vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* width: 50%; */
 }
 .login-block {
-  margin: 0 20px;
+  margin: 0 2vh;
 }
 .greetings {
   text-align: center;
-  font-size: 28px;
+  font-size: 3vh;
 }
 .instructions {
   text-align: center;
@@ -365,19 +381,21 @@ section {
   font-weight: 500;
 }
 .login-form {
-  margin: 10px 0;
+  margin: auto;
+  width: 50%;
 }
 .form-field {
-  margin: 15px 0;
+  margin: 2vh 0;
 }
 .form-title {
   font-size: 2vh;
+  padding: 0.5em;
 }
 .form-input {
-  padding: 2vh 3vh;
+  padding: 1.5vh 2vh;
   box-sizing: border-box;
   border: 0.01vh solid var(--secondary-color);
-  border-radius: 10px;
+  border-radius: 3vh;
   background-color: var(--space-background);
   font-size: 2vh;
   outline: var(--secondary-color);
@@ -386,15 +404,15 @@ section {
 .login-btn {
   background-color: var(--primary-color);
   color: var(--block-background);
-  border: 1px solid var(--primary-color);
-  border-radius: 10px;
-  padding: 5px 10px;
-  font-size: 14px;
+  border: 0.01vh solid var(--primary-color);
+  border-radius: 3vh;
+  padding: 1.5vh 2vh;
+  font-size: 2vh;
   width: 100%;
 }
 .login-btn:hover {
   background-color: var(--secondary-color);
-  border: 1px solid var(--secondary-color);
+  border: 0.01vh solid var(--secondary-color);
   color: var(--text-color);
   transition: all 100ms ease-in-out;
 }
@@ -403,18 +421,85 @@ section {
   font-weight: 500;
   margin-right: 10px;
 }
+.text-center {
+  text-align: center;
+  margin-top: 30px;
+}
+.form-summary-error {
+  border: 0.1vh solid #fd5959;
+  padding: 5px;
+  color: #fd5959;
+  font-weight: 400;
+}
+.content-header {
+  margin-top: 3vh;
+  background-color: var(--secondary-color);
 
-.login-section {
-  background: white;
-  color: var(--text-color);
+  border-radius: 3vh;
+  color: white;
   font-weight: 600;
   display: flex;
-  justify-content: center;
 }
-.login-block {
-  margin: 0 10vw;
+.flex-table {
+  display: flex;
+  flex-flow: row wrap;
+  transition: all 0.5s ease-in;
 }
 
+.flex-row {
+  width: calc(100% / 7);
+  text-align: left;
+  padding: 0.5em 0.5em;
+}
+
+.content-project-item {
+  display: flex;
+  border-bottom: 0.01vh solid var(--secondary-color);
+}
+.d-block {
+  display: block;
+}
+.d-none {
+  display: none;
+}
+.new-project-btn {
+  padding: 1vh 2vh;
+  margin: 1vh 0;
+}
+
+.project-preview {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 20px 20px;
+  flex-grow: 1;
+  width: 90%;
+  border: 0.01vh var(--text-color) solid;
+  border-radius: 3vh;
+}
+.project-item {
+  margin: 1vh;
+
+  border-radius: 3vh;
+  padding: 1vh;
+}
+.logout {
+  padding: 1vh;
+  background-color: var(--secondary-color);
+  font-weight: 600;
+}
+
+.content-project-item-selected {
+  font-weight: 600;
+}
+.action-link {
+  color: var(--text-color);
+}
+.action-link:hover {
+  color: var(--secondary-color);
+  transition: 0.025ms all ease-in-out;
+  cursor: pointer;
+}
 /*Medium devices (tablets, 768px and up)*/
 @media (max-width: 992px) {
   #grid-flex .gap {
@@ -460,6 +545,7 @@ section {
     text-align: center;
   }
   .navbar-nav {
+    margin: 2em;
     flex-wrap: nowrap;
     overflow: auto;
   }
@@ -472,6 +558,9 @@ section {
 
   .img-fluid {
     width: 100%;
+  }
+  .login-form {
+    width: 80%;
   }
 }
 

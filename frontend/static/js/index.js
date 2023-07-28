@@ -3,7 +3,13 @@ import HomeView from "./views/HomeView.js";
 import AboutView from "./views/AboutView.js";
 import WorkView from "./views/WorkView.js";
 import ContactView from "./views/ContactView.js";
-import AdminView from "./views/AdminView.js";
+import LoginView from "./views/LoginView.js";
+import ProjectsView from "./views/ProjectsView.js";
+import { getResponse } from "../request.js";
+import { setTime, setUserId } from "./utils/assistants.js";
+
+let projectsToUpdate = [];
+let activeProject = null;
 
 const navigateTo = (url) => {
   history.pushState(null, null, url);
@@ -30,7 +36,12 @@ const router = async () => {
     },
     {
       path: "/admin",
-      view: AdminView,
+      view: ProjectsView,
+      requiredAuth: true,
+    },
+    {
+      path: "/login",
+      view: LoginView,
     },
   ];
 
@@ -41,7 +52,7 @@ const router = async () => {
       isMatch: location.pathname === route.path,
     };
   });
-  console.log(potentialMatches);
+  //console.log(potentialMatches);
   let match = potentialMatches.find((potentialMatch) => potentialMatch.isMatch);
 
   if (!match) {
@@ -51,11 +62,96 @@ const router = async () => {
     };
   }
 
-  const view = new match.route.view();
+  const insertView = async (match) => {
+    const app = document.querySelector("#app");
+    const view = new match.route.view(app, handlers());
+    app.innerHTML = await view.getHtml();
 
-  const app = document.querySelector("#app");
-  app.innerHTML = await view.getHtml();
-  app.querySelector("#search-form").addEventListener("submit", inputWord);
+    if (typeof view.afterRender === "function") {
+      await view.afterRender();
+    }
+    if (typeof view.updateProjectsList === "function") {
+      await refreshProjects();
+    }
+
+    async function refreshProjects() {
+      const projects = await getResponse("/projects", "get");
+      await setProjects(projects.data);
+    }
+
+    async function setProjects(projects) {
+      projectsToUpdate = projects;
+      await view.updateProjectsList(projects);
+    }
+
+    async function setActiveProject(project) {
+      activeProject = project;
+      await view.updateActiveProject(project);
+    }
+
+    async function selectProjectById(projectId) {
+      const projectToEdit = await getResponse(`/projects/${projectId}`, "get");
+      setActiveProject(projectToEdit.data);
+    }
+
+    function handlers() {
+      return {
+        onProjectAdd: async (name, description, link, img) => {
+          const addedProject = {
+            name: name,
+            description: description,
+            date: setTime(),
+            link: link,
+            img: img,
+            userId: await setUserId(),
+          };
+          await getResponse("/projects", "post", addedProject);
+          await refreshProjects();
+        },
+
+        onProjectDelete: async (projectId) => {
+          await getResponse(`/projects/${projectId}`, "delete");
+          await refreshProjects();
+        },
+
+        onProjectEdit: async (projectId) => {
+          await selectProjectById(projectId);
+          await refreshProjects();
+        },
+        onProjectSave: async (name, description, link, img) => {
+          //  console.log(await setUserId());
+          const editedProject = {
+            idProject: activeProject.idProject,
+            name: name,
+            description: description,
+            date: setTime(),
+            link: link,
+            img: img,
+            userId: await setUserId(),
+          };
+          await getResponse(
+            `/projects/${activeProject.idProject}`,
+            "PATCH",
+            editedProject
+          );
+          await refreshProjects();
+        },
+      };
+    }
+  };
+
+  if (match.route.requiredAuth) {
+    const res = await getResponse("/auth", "get");
+
+    if (!res) {
+      const match = potentialMatches.find(
+        (potentialMatch) => potentialMatch.route.path === "/login"
+      );
+      return insertView(match);
+    }
+  }
+
+  await insertView(match);
 };
 
 window.addEventListener("popstate", router);
@@ -70,21 +166,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
   router();
 });
-
-function showResult(response) {
-  let word = document.querySelector(".word");
-  word.innerHTML = response.data[0].word;
-  //TODO show other results
-}
-
-function searchWord(keyword) {
-  let apiURL = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${keyword}`; //build API url
-  axios.get(apiURL).then(showResult);
-}
-
-function inputWord(event) {
-  event.preventDefault();
-  let wordInput = document.querySelector("#search-input"); //take data from search input
-
-  searchWord(wordInput.value);
-}
