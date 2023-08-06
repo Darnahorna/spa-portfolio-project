@@ -57,7 +57,3 @@ To test the project, you can follow the link https://daria-nahorna-portfolio.fly
 8. Run `npm install` to instal dependencies
 9. Run `npm run start` to start project locally
 10. Open in browser 127.0.0.1:8080
-
-## Acknowledgment
-
-This is a portfolio project that represents my projects as well as knowledge from the course.
