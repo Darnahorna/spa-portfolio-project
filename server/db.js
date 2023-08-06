@@ -15,7 +15,7 @@ dotenv.config({ path: path.join(dirname, "./.env") });
 
 // Create a MySQL connection pool
 const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST,
+  host: process.env.HOST,
   user: process.env.MYSQL_USER,
   database: process.env.MYSQL_DATABASE,
   password: process.env.MYSQL_PASSWORD,
