@@ -1,0 +1,24 @@
+# fly.toml app configuration file generated for mysql-crud-app on 2023-08-05T19:32:14+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "mysql-crud-app"
+primary_region = "arn"
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+
+[processes]
+app = "--datadir /data/mysql --default-authentication-plugin mysql_native_password --performance-schema=OFF --innodb-buffer-pool-size 64M"
+
+[mounts]
+  source="mysqldata"
+  destination="/data"
+
+[env]
+  MYSQL_DATABASE = "projects" 
+  MYSQL_USER = "daria"
+
+[build]
+  image = "mysql:8.0.30"

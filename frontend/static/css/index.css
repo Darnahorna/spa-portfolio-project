@@ -187,7 +187,7 @@ section {
 
 .bottom-link {
   font-family: var(--main-font);
-  padding: 4vh;
+  padding: 1vh;
   color: var(--text-color);
   text-decoration: none;
   font-size: 2vh;

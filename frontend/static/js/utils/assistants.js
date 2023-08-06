@@ -1,6 +1,6 @@
 import { getResponse } from "../../request.js";
 
-export const setTime = () => {
+export const getTime = () => {
   let month = [
     "Jan",
     "Feb",
@@ -25,7 +25,7 @@ export const setTime = () => {
   return `${currentDate} ${currentMonth} ${currentYear}`;
 };
 
-export async function setUserId() {
+export async function getUserId() {
   const userId = await getResponse("/user", "get");
   return userId.data;
 }

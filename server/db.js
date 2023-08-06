@@ -15,10 +15,10 @@ dotenv.config({ path: path.join(dirname, "./.env") });
 
 // Create a MySQL connection pool
 const pool = mysql.createPool({
-  host: process.env.HOST,
-  user: process.env.DBUSER,
-  database: process.env.DB,
-  password: process.env.PASSWORD,
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  database: process.env.MYSQL_DATABASE,
+  password: process.env.MYSQL_PASSWORD,
 });
 
 // Prepare the connection
@@ -47,8 +47,8 @@ function handleError(res, error) {
 export async function getData(res, statement, params) {
   const connection = await prepareConnection();
   try {
-    const res = await executeStatement(connection, statement, params);
-    return res;
+    const result = await executeStatement(connection, statement, params);
+    return result;
   } catch (error) {
     handleError(res, error);
   } finally {

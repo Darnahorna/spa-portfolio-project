@@ -5,6 +5,7 @@ import session from "express-session";
 import { router } from "./api.routes.js";
 import { sessionStore } from "./db.js";
 import dotenv from "dotenv";
+import cors from "cors";
 
 const app = express();
 
@@ -13,8 +14,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename).split("\\");
 __dirname.pop();
 export const dirname = __dirname.join("\\");
-
-export const baseUrl = `${process.env.HOST}:${process.env.HOST}`;
 
 dotenv.config({ path: path.join(dirname, "./.env") });
 
@@ -33,7 +32,7 @@ app.use(
     },
   })
 );
-
+app.use(cors());
 app.use("/", router);
 app.use("/static", express.static(path.resolve(dirname, "frontend", "static")));
 

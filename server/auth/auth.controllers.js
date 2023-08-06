@@ -21,7 +21,7 @@ export async function handleLogin(req, res, next) {
     const match = await bcrypt.compare(payload.password, foundUser[0].password);
 
     if (match) {
-      req.session.regenerate((err) => {
+      return req.session.regenerate((err) => {
         if (err) {
           return next(err);
         }
@@ -32,7 +32,7 @@ export async function handleLogin(req, res, next) {
           }
           req.session.user = foundUser[0];
 
-          res.redirect("back");
+          res.redirect("/admin");
         });
       });
 
@@ -60,18 +60,22 @@ export const logout = async (req, res, next) => {
 };
 
 export async function authenticate(req, res, next) {
-  // console.log(req.sessionID);
-  if (!req.sessionID) {
-    console.log("session is not found");
-  }
-  const statement = "SELECT * FROM projects.sessions WHERE session_id=?;";
-  const foundSession = await getData(res, statement, [req.sessionID]);
+  try {
+    // console.log(req.sessionID);
+    if (!req.sessionID) {
+      console.log("session is not found");
+    }
+    const statement = "SELECT * FROM projects.sessions WHERE session_id=?;";
+    const foundSession = await getData(res, statement, [req.sessionID]);
 
-  if (foundSession.length > 0) {
-    // console.log("Authenticated");
-    next();
-  } else {
-    // console.log("NOT Authenticated");
-    res.redirect("/login");
+    if (foundSession.length > 0) {
+      // console.log("Authenticated");
+      next();
+    } else {
+      // console.log("NOT Authenticated");
+      res.redirect("/login");
+    }
+  } catch (err) {
+    console.log(err);
   }
 }

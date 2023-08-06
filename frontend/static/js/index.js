@@ -5,8 +5,8 @@ import WorkView from "./views/WorkView.js";
 import ContactView from "./views/ContactView.js";
 import LoginView from "./views/LoginView.js";
 import ProjectsView from "./views/ProjectsView.js";
-import { getResponse } from "../request.js";
-import { setTime, setUserId } from "./utils/assistants.js";
+import { getAuthResponse, getResponse } from "../request.js";
+import { getTime, getUserId } from "./utils/assistants.js";
 
 let projectsToUpdate = [];
 let activeProject = null;
@@ -62,6 +62,17 @@ const router = async () => {
     };
   }
 
+  if (match.route.requiredAuth) {
+    const res = await getAuthResponse("/auth", "GET");
+
+    if (res.redirected) {
+      navigateTo("/login");
+      match = potentialMatches.find(
+        (potentialMatch) => potentialMatch.route.path === "/login"
+      );
+    }
+  }
+
   const insertView = async (match) => {
     const app = document.querySelector("#app");
     const view = new match.route.view(app, handlers());
@@ -100,10 +111,10 @@ const router = async () => {
           const addedProject = {
             name: name,
             description: description,
-            date: setTime(),
+            date: getTime(),
             link: link,
             img: img,
-            userId: await setUserId(),
+            userId: await getUserId(),
           };
           await getResponse("/projects", "post", addedProject);
           await refreshProjects();
@@ -124,10 +135,10 @@ const router = async () => {
             idProject: activeProject.idProject,
             name: name,
             description: description,
-            date: setTime(),
+            date: getTime(),
             link: link,
             img: img,
-            userId: await setUserId(),
+            userId: await getUserId(),
           };
           await getResponse(
             `/projects/${activeProject.idProject}`,
@@ -139,17 +150,6 @@ const router = async () => {
       };
     }
   };
-
-  if (match.route.requiredAuth) {
-    const res = await getResponse("/auth", "get");
-
-    if (!res) {
-      const match = potentialMatches.find(
-        (potentialMatch) => potentialMatch.route.path === "/login"
-      );
-      return insertView(match);
-    }
-  }
 
   await insertView(match);
 };

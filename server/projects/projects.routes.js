@@ -30,13 +30,13 @@ router.patch(
 router.post(
   "/projects",
   authController.authenticate,
-  //validate(schema),
+  validate(schema),
   projectController.createProject
 );
 
 router.get(
   "/user",
   authController.authenticate,
-  //validate(schema),
+  validate(schema),
   projectController.getUserBySession
 );
